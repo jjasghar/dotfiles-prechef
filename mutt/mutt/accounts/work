@@ -1,0 +1,46 @@
+#
+# my muttrc for work
+#
+
+set from = "<FROMEMAIL>"
+set imap_user = "<EMAIL>" imap_pass="<PASSWORD>"
+bind index "^" imap-fetch-mail
+set hostname="<WORKEMAILHOSTNAME>"
+
+
+set folder = "imaps://<IMAPSERVER>:993"
+set spoolfile = "imaps://<IMAPSERVER>/INBOX"
+
+set header_cache =~/.mutt/cache/headers
+set message_cachedir =~/.mutt/cache/bodies
+set certificate_file =~/.mutt/certificates
+
+# IF you want a work specific signature here
+set signature="~/.signature_work"
+
+set smtp_url = "smtp://<EMAILADDRESS><SMTPADDRESS>" smtp_pass="<SMTPPASSWD>"
+
+bind editor <space> noop
+
+set move = no  #Stop asking to "move read messages to mbox"!
+set imap_keepalive = 900
+
+# Header stuff
+ignore "Authentication-Results:"
+ignore "DomainKey-Signature:"
+ignore "DKIM-Signature:"
+hdr_order Date From To Cc
+
+ignore *
+unignore from: date subject to cc
+unignore x-mailing-list: posted-to:
+unignore x-mailer:
+
+# For better looks
+set markers=no # don't put '+' at the beginning of wrapped lines
+
+# sorting options
+set sort=reverse-threads # default sort messages by thread
+set sort_browser=reverse-date # showing mbox list default to newest first
+set sort_aux=last-date-received # showing threads with youngest message last
+

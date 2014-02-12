@@ -1,0 +1,261 @@
+# my .zshrc
+#
+#
+#
+#
+# [--- notes ---]
+#setopt OPTION_NAME <--- Turn an option on
+#unsetopt OPTION_NAME <--- Turn an option off
+#
+#zsh options are case-insensitive, and underscores are ignored. This allows option names to be easily readable. It is good convention to use all caps when specifying options.
+#Any option can be turned off by preceeding its name with 'NO'. So, if there is an option that enables beeping called BEEP, you can run setopt NO_BEEP to disable beeping. 
+
+precmd(){
+  echo -ne "\e]1;$PWD\a"
+}
+
+
+PROMPT="%B%*%b [%~] %% "
+
+# adding vi bindings
+bindkey -v
+bindkey '\e[3~' delete-char
+bindkey '^R' history-incremental-search-backward
+
+# zsh options
+setopt auto_cd
+setopt no_correct_all
+
+# completion
+autoload -U compinit
+compinit
+#For autocompletion with an arrow-key driven interface
+zstyle ':completion:*' menu select
+autoload -Uz history-beginning-search-menu
+zle -N history-beginning-search-menu
+bindkey '^X^X' history-beginning-search-menu
+autoload -U zmv
+
+#
+# aliases
+#
+#alias [ -gmrL ] [ name[=value] ... ]
+#The -r argument tells the alias command to operate on regular aliases. The -g argument tells the alias command to operate on global aliases.
+#
+#alias name1=value1 name2=value2 ... nameX=valueX# 
+
+alias ls="ls -G"
+alias be="bundle exec"
+alias vim='open -a MacVim.app'
+alias v='vim'
+alias n='cd ~/Dropbox/Notes/'
+alias speedtest_500='wget --output-document=/dev/null http://speedtest.wdc01.softlayer.com/downloads/test500.zip'
+alias ss='vim ~/scratchfile'
+alias s='ssh'
+alias gist='gist -c -p'
+alias grep='grep --color'
+alias chef_zero='ruby -e "require 'chef_zero/server'; server = ChefZero::Server.new(:port => 8889); server.start"'
+alias disappoint="echo ಠ_ಠ"
+alias web_host="ruby -run -e httpd . -p 5000"
+alias ard_stop="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate -stop"
+alias ard_restart="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -privs -all -restart -agent"
+
+# git aliases
+alias ga="git add"
+alias gb="git branch"
+alias gc="git commit"
+alias gco="git checkout"
+alias gdh="git diff HEAD --stat"
+alias gf="git fetch"
+alias gpu="git push"
+alias gpr="git pull --rebase"
+alias gmt="git mergetool -y"
+alias gmo="git merge origin/master"
+alias gs="git status -sb"
+alias glp="git log --graph --pretty --all"
+alias gld="git log --graph --decorate --all"
+alias git-merge-cleanup="git branch --merged | grep -v "\*" | xargs -n 1 git branch -d"
+
+alias gv='gvim -p $(git status --short |egrep "^ M " | cut -d" " -f3) -c "tabdo Gdiff"'
+
+# knife alias
+alias k="knife"
+
+# a global alias
+alias -g L="|less" # Write L after a command to page through the output.
+alias -g TL='| tail -20'
+alias -g NUL="> /dev/null 2>&1" # You get the idea.
+alias -g pastebin=" curl -F 'sprunge=<-' http://sprunge.us"
+
+# brace expantion
+# A string of the form str{xx,yy,zz}ing is expanded to the individual words strxxing stryying strzzing on the command line.
+
+# going through history "!"
+#
+#You can use the < UP-ARROW > and < DOWN-ARROW > keys to cycle through your past commands. This will only work, however, if your terminal's arrow keys are bound to the apprpriate line editing commands. By entering ^old^new on the command line, you can run the previous command with any occurance of old replaced with new
+
+setopt INC_APPEND_HISTORY SHARE_HISTORY
+# append history instead of over writting it
+setopt append_history
+setopt EXTENDED_HISTORY  # puts timestamps in the history
+HISTFILE=$HOME/.zhistory
+HISTSIZE=1000
+SAVEHIST=1000
+
+# remove slash?
+setopt AUTO_REMOVE_SLASH
+
+#
+# Adding git prompt
+#
+# Adapted from code found at <https://gist.github.com/1712320>.
+
+setopt prompt_subst
+autoload -U colors && colors # Enable colors in prompt
+
+# Modify the colors and symbols in these variables as desired.
+GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
+GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
+GIT_PROMPT_SUFFIX="%{$fg[green]%}]%{$reset_color%}"
+GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
+GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
+GIT_PROMPT_MERGING="%{$fg_bold[magenta]%}⚡︎%{$reset_color%}"
+GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}●%{$reset_color%}"
+GIT_PROMPT_MODIFIED="%{$fg_bold[yellow]%}●%{$reset_color%}"
+GIT_PROMPT_STAGED="%{$fg_bold[green]%}●%{$reset_color%}"
+
+# Show Git branch/tag, or name-rev if on detached head
+parse_git_branch() {
+  (git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
+}
+
+# Show different symbols as appropriate for various Git repository states
+parse_git_state() {
+
+  # Compose this value via multiple conditional appends.
+  local GIT_STATE=""
+
+  local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
+  if [ "$NUM_AHEAD" -gt 0 ]; then
+    GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
+  fi
+
+  local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
+  if [ "$NUM_BEHIND" -gt 0 ]; then
+    GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
+  fi
+
+  local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
+  if [ -n $GIT_DIR ] && test -r $GIT_DIR/MERGE_HEAD; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
+  fi
+
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
+  fi
+
+  if ! git diff --quiet 2> /dev/null; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
+  fi
+
+  if ! git diff --cached --quiet 2> /dev/null; then
+    GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
+  fi
+
+  if [[ -n $GIT_STATE ]]; then
+    echo "$GIT_PROMPT_PREFIX$GIT_STATE$GIT_PROMPT_SUFFIX"
+  fi
+
+}
+
+# If inside a Git repository, print its branch and state
+git_prompt_string() {
+  local git_where="$(parse_git_branch)"
+  [ -n "$git_where" ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+}
+
+# Set the right-hand prompt
+RPS1='%m $(git_prompt_string)' #$(rvm_ruby_prompt)$(rvm_gem_set)'
+
+
+# sources
+
+# exports
+export EDITOR=vim
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:
+export PDFCOMBINER_PEM=/Users/jasghar/.ssh/pdfcombiner.pem
+
+
+# adding color coding to the list
+zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:${(s.:.)LS_COLORS}")'
+
+#
+#
+# functions
+#
+#
+
+# history function: h ls will list all the ls 
+h() { if [ -z "$*" ]; then history 1; else history 1 | egrep "$@"; fi; }
+
+function rvm_gem_set {
+  if (declare -f rvm > /dev/null) {
+    if [[ -x $MY_RUBY_HOME ]]
+      then rvm gemset list | grep "=>" | sed 's/=>//'
+    fi
+    }
+  }
+
+function rvm_ruby_prompt {
+  if (declare -f rvm > /dev/null) {
+    if [[ -x $MY_RUBY_HOME ]]
+      then ruby -v | sed 's/\([^(]*\).*/\1/'
+    fi
+    }
+}
+
+# table from > 
+function table() {
+    case "$1" in
+              flip)
+                  echo "（╯°□°）╯︵ ┻━┻ "
+                  ;;
+              set)
+                  echo "┬─┬﻿ ノ( ゜-゜ノ)"
+                  ;;
+              man)
+                  echo "(╯°Д°）╯︵ /(.□ . \)"
+                  ;;
+              bear)
+                  echo "ʕノ•ᴥ•ʔノ ︵ ┻━┻"
+                  ;;
+             jedi)
+                  echo "(._.) ~ ︵ ┻━┻"
+                  ;;
+             pudgy)
+                  echo "(ノ ゜Д゜)ノ ︵ ┻━┻"
+                  ;;
+             battle)
+                  echo "(╯°□°)╯︵ ┻━┻ ︵ ╯(°□° ╯)"
+                  ;;
+             rage)
+                 echo "‎(ﾉಥ益ಥ）ﾉ﻿ ┻━┻"
+                 ;;
+            herc)
+                echo "(/ .□.)\ ︵╰(゜Д゜)╯︵ /(.□. \)"
+                ;;
+            *)
+               echo "Unknown table"
+               exit 1
+               ;;
+    esac
+}
+
+#s3put fuction
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
+
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+
+

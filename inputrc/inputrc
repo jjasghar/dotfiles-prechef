@@ -1,0 +1,223 @@
+set editing-mode vi
+
+set bind-tty-special-chars off
+
+# man bash | less -p beginning-of-line
+
+# Example file:
+# http://www.gnu.org/software/bash/manual/html_node/Sample-Init-File.html
+# docs on the `bind` builtin command:
+# http://theory.uwinnipeg.ca/localfiles/infofiles/bash/bashref_55.html
+# or just: man readline
+
+# Note: There are a few bindings that would depend on some kind of readline
+# distinction between <Esc>x and Alt+x. One obvious one is Alt+b, which I have
+# disabled, and that'll bother an emacs-head, but not being able to <Esc>b and
+# stay in Normal Mode was irritating me.
+
+# Dump of set -o emacs && bind -p
+"\C-g": abort
+"\C-x\C-g": abort
+"\e\C-g": abort
+"\C-j": accept-line
+"\C-m": accept-line
+"\C-b": backward-char
+"\eOD": backward-char
+"\e[D": backward-char
+"\C-h": backward-delete-char
+"\C-?": backward-delete-char
+"\C-x\C-?": backward-kill-line
+"\e\C-h": backward-kill-word
+"\e\C-?": backward-kill-word
+#Need to find a timeout setting for readline#"\eb": backward-word
+"\e<": beginning-of-history
+"\C-a": beginning-of-line
+"\eOH": beginning-of-line
+"\e[1~": beginning-of-line
+"\e[H": beginning-of-line
+"\C-xe": call-last-kbd-macro
+#Need to find a timeout setting for readline#"\ec": capitalize-word
+"\C-]": character-search
+"\e\C-]": character-search-backward
+"\C-l": clear-screen
+"\C-i": complete
+"\e\e": complete
+"\e!": complete-command
+"\e/": complete-filename
+"\e@": complete-hostname
+"\e{": complete-into-braces
+"\e~": complete-username
+"\e$": complete-variable
+"\C-d": delete-char
+"\e[3~": delete-char
+"\e\\": delete-horizontal-space
+"\e-": digit-argument
+"\e0": digit-argument
+"\e1": digit-argument
+"\e2": digit-argument
+"\e3": digit-argument
+"\e4": digit-argument
+"\e5": digit-argument
+"\e6": digit-argument
+"\e7": digit-argument
+"\e8": digit-argument
+"\e9": digit-argument
+"\C-x\C-v": display-shell-version
+"\C-xA": do-lowercase-version
+"\C-xB": do-lowercase-version
+"\C-xC": do-lowercase-version
+"\C-xD": do-lowercase-version
+"\C-xE": do-lowercase-version
+"\C-xF": do-lowercase-version
+"\C-xG": do-lowercase-version
+"\C-xH": do-lowercase-version
+"\C-xI": do-lowercase-version
+"\C-xJ": do-lowercase-version
+"\C-xK": do-lowercase-version
+"\C-xL": do-lowercase-version
+"\C-xM": do-lowercase-version
+"\C-xN": do-lowercase-version
+"\C-xO": do-lowercase-version
+"\C-xP": do-lowercase-version
+"\C-xQ": do-lowercase-version
+"\C-xR": do-lowercase-version
+"\C-xS": do-lowercase-version
+"\C-xT": do-lowercase-version
+"\C-xU": do-lowercase-version
+"\C-xV": do-lowercase-version
+"\C-xW": do-lowercase-version
+"\C-xX": do-lowercase-version
+"\C-xY": do-lowercase-version
+"\C-xZ": do-lowercase-version
+# I *think* these are all OK, since you can't quickly type the cap letters.
+"\eA": do-lowercase-version
+"\eB": do-lowercase-version
+"\eC": do-lowercase-version
+"\eD": do-lowercase-version
+"\eE": do-lowercase-version
+"\eF": do-lowercase-version
+"\eG": do-lowercase-version
+"\eH": do-lowercase-version
+"\eI": do-lowercase-version
+"\eJ": do-lowercase-version
+"\eK": do-lowercase-version
+"\eL": do-lowercase-version
+"\eM": do-lowercase-version
+"\eN": do-lowercase-version
+"\eP": do-lowercase-version
+"\eQ": do-lowercase-version
+"\eR": do-lowercase-version
+"\eS": do-lowercase-version
+"\eT": do-lowercase-version
+"\eU": do-lowercase-version
+"\eV": do-lowercase-version
+"\eW": do-lowercase-version
+"\eX": do-lowercase-version
+"\eY": do-lowercase-version
+"\eZ": do-lowercase-version
+"\el": downcase-word
+"\e\C-i": dynamic-complete-history
+"\C-x\C-e": edit-and-execute-command
+"\C-x)": end-kbd-macro
+"\e>": end-of-history
+"\C-e": end-of-line
+"\eOF": end-of-line
+"\e[4~": end-of-line
+"\e[F": end-of-line
+"\C-x\C-x": exchange-point-and-mark
+"\C-f": forward-char
+"\eOC": forward-char
+"\e[C": forward-char
+"\C-s": forward-search-history
+"\ef": forward-word
+"\eg": glob-complete-word
+"\C-x*": glob-expand-word
+"\C-xg": glob-list-expansions
+"\e^": history-expand-line
+"\e#": insert-comment
+"\e*": insert-completions
+"\e.": insert-last-argument
+# added 0219 because i use control more than alt
+"\C-.": insert-last-argument
+"\e_": insert-last-argument
+"\C-k": kill-line
+#Need to find a timeout setting for readline#"\ed": kill-word
+"\C-n": next-history
+"\eOB": next-history
+"\e[B": next-history
+"\en": non-incremental-forward-search-history
+"\ep": non-incremental-reverse-search-history
+"\C-o": operate-and-get-next
+"\C-x!": possible-command-completions
+"\e=": possible-completions
+"\e?": possible-completions
+"\C-x/": possible-filename-completions
+"\C-x@": possible-hostname-completions
+"\C-x~": possible-username-completions
+"\C-x$": possible-variable-completions
+"\C-p": previous-history
+"\eOA": previous-history
+"\e[A": previous-history
+"\C-q": quoted-insert
+"\C-v": quoted-insert
+"\C-x\C-r": re-read-init-file
+"\C-r": reverse-search-history
+"\e\C-r": revert-line
+"\er": revert-line
+"\C-@": set-mark
+"\e ": set-mark
+"\e\C-e": shell-expand-line
+"\C-x(": start-kbd-macro
+"\e&": tilde-expand
+"\C-t": transpose-chars
+"\et": transpose-words
+"\C-x\C-u": undo
+"\C-_": undo
+"\C-u": unix-line-discard
+#see next# "\C-w": unix-word-rubout
+# More like vim's default iskeyword's (e.g., foo/bar^W becomes foo/)
+"\C-w": backward-kill-word
+"\eu": upcase-word
+"\C-y": yank
+"\e.": yank-last-arg
+"\e_": yank-last-arg
+"\e\C-y": yank-nth-arg
+"\ey": yank-pop
+$if Ruby
+    $if mode=vi
+        set keymap vi-command
+        "[14~":   "Ils -l\n"        # <F4>
+        "[15~":   "\C-lIwhereami\n" # <F5>
+        "[28~":   "Iedit -c\n"      # <Shift+F5>
+        "[17~":   "Iup\n"           # <F6>
+        "[18~":   "Idown\n"         # <F7>
+        "[19~":   "Icontinue\n"     # <F8>
+        "[32~":   "Itry-again\n"    # <Shift-F8>
+        "[21~":   "Inext\n"         # <F10>
+        "[23~":   "Istep\n"         # <F11>
+        "[23$":   "Ifinish\n"       # Shift+<F11>
+        # Cross-terminal compatibility:
+        "[19;2~": "Itry-again\n"    # <Shift-F8> (xterm/gnome-terminal)
+        "[23;2~": "Ifinish\n"       # Shift+<F11> (xterm/gnome-terminal)
+        "OS": "Ils -l\n"            # <F4>
+        "OA": previous-history
+        "[A": previous-history
+        "OB": next-history
+        "[B": next-history
+    $else
+        # Emacs Bindings:
+        "\e[14~":   "ls -l\n"
+        "\eOS":     "ls -l\n"
+        "\e[15~":   "\C-lwhereami\n"
+        "\e[28~":   "edit -c\n"
+        "\e[17~":   "up\n"
+        "\e[18~":   "down\n"
+        "\e[19~":   "continue\n"
+        "\e[32~":   "try-again\n"
+        "\e[19;2~": "try-again\n"
+        "\e[21~":   "next\n"
+        "\e[23~":   "step\n"
+        "\e[23$":   "finish\n"
+        "\e[23;2~": "finish\n"
+    $endif
+$endif

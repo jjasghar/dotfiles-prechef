@@ -1,0 +1,52 @@
+#
+# Main aliases
+# 
+alias cls='clear'
+alias :q='exit'
+alias :q!='logout'
+alias hostdir='ifconfig | grep inet ; python -m SimpleHTTPServer'
+alias c='clear'
+alias speedtest_500='wget --output-document=/dev/null http://speedtest.wdc01.softlayer.com/downloads/test500.zip'
+alias cd_date='mkdir `date +%F` && cd `date +%F`'
+alias v='gvim'
+alias vim='gvim'
+alias web_host='ruby -run -e httpd . -p 5000'
+
+#
+# Main bash functions
+#
+# send one packet to google and see if it gets there
+connected() { ping -c1 -w2 google.com  2>&1| grep packet; }
+# caluate some numbers
+calc(){ awk "BEGIN{ print $* }" ;}
+# check spelling against google
+spellcheck(){ typeset y=$@;curl -sd "<spellrequest><text>$y</text></spellrequest>" https://google.com/tbproxy/spell|sed -n '/s="[0-9]"/{s/<[^>]*>/ /g;s/\t/ /g;s/ *\(.*\)/Suggestions: \1\n/g;p}'|tee >(grep -Eq '.*'||echo -e "OK");}
+# a psuedo-screen saver
+#alias s='i=( 0 1 ); COL=$(( $(tput cols) / 2 )); clear; tput setb 0; tput setaf 2; while :; do tput cup $((RANDOM%COL)) $((RANDOM%COL)); printf "%$((RANDOM%COL))s" ${i[RANDOM%2]}; done; tput sgr0; clear'
+alias top_cmds="sed -e 's/^sudo //' -e 's/^man *//' .bash_history |awk '{ print $1 }'|sort|uniq -c|sort -n"
+
+#git aliases
+alias git-amend='git commit --amend -C HEAD'
+alias git-diff-head='git diff HEAD^ --stat'
+alias gp='git pull'
+#alias 'git status'='git status -sb'
+
+
+#
+# Check if you are running on Linux or "other"
+#
+
+if [ `uname -a | awk {'print $1'}` == "Linux" ]
+	then
+		alias ls="ls --color"
+		alias xxx='xlock'
+		alias failedsshpasswd="zcat /var/log/auth.log* | grep 'Failed password' | grep sshd | awk '{print $1,$2}' | sort -k 1,1M -k 2n | uniq -c"
+		alias z='zenity --info --text="-=|Process done|=-" --display :0.0'
+	else
+		alias ls="ls -G"
+		alias port_self_update="sudo port -v selfupdate"
+		alias org_backup="tar zcvf org.`date +%F`.tar.gz org/ && mv org.`date +%F`.tar.gz ~/Dropbox/backup/"
+		alias kill_dock_bounce="defaults write com.apple.dock single-app -bool true && killall Dock"
+		alias bring_dock_bounce_back="defaults write com.apple.dock single-app -bool false && killall Dock"
+		
+fi

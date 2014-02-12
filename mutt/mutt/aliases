@@ -1,0 +1,12 @@
+# Template
+#alias nickname Long Name <my-friend@domain.tld>
+
+# Personal
+alias Mom Mom <Mom@heremail.com>
+alias Dad Dad <Dad@hisemail.com>
+alias Sister Sister <Sister@heremail.com>
+
+# Work
+alias Boss Boss <boss@workemail.com>
+alias BosssBoss Bigboss <bigboss@workemail.com>
+alias Coworker Coworker <coworker@workemail.com>
