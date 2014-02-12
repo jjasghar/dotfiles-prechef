@@ -1,0 +1,76 @@
+#
+# Run brew bundle ~/Brewfile
+#
+
+# Update brew formulas
+update
+
+# Upgrade any already-installed formulae
+upgrade
+
+# Apps I like running
+
+## shell stuff
+install bash-completion
+install tmate
+install tmux
+install ssh-copy-id
+install unrar
+install tree
+install watch
+
+## dev stuff
+install apple-gcc42
+install asciidoc
+install boost
+install calcurse
+install go
+install imagemagick
+install leiningen
+install libksba
+install librsvg
+install libxslt
+install libyaml
+install jq
+install make
+install memcached
+
+## (D)VCS stuff
+install bazaar
+install gist
+install git
+install mercurial
+install hub
+install tig
+
+## Editor stuff
+install macvim
+
+## Web stuff
+install dnsmasq
+install gnupg
+install irssi
+install mutt
+install mysql
+install nginx
+install ngircd
+install nmap
+install node
+install p11-kit
+install phantomjs
+install poppler
+install postgresql
+install qemu
+install qt
+install redis
+install runit
+install s3cmd
+install sqlite
+install unixodbc
+install urlview
+install w3m
+install weechat
+install wget
+
+# Remove outdated versions from the cellar
+cleanup
