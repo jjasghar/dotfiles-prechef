@@ -37,12 +37,15 @@ nnoremap <F5> :UndotreeToggle<cr>
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 
 " spelling
-" toggle spellchecking on and off with `,s`
-let mapleader = ","
+" toggle spellchecking on and off with `\s`
 nmap <silent> <leader>s :set spell!<CR>
 " set region for dict
 set spelllang=en_us
 set spell
+
+" Rubocop bindings
+let g:vimrubocop_keymap = 0
+nmap <Leader>r :RuboCop<CR>
 
 noremap <Leader>W :w !sudo tee % > /dev/null
 
