@@ -53,8 +53,6 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set expandtab
-set list listchars=tab:»¯,trail:°,extends:»,precedes:«
-set colorcolumn=72      " set column line
 set autoindent          " fix copying in with the stupid indendets
 set autochdir           " so i don't have to keep traversing directories
 set nocompatible        " use vim defaults
@@ -83,7 +81,6 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-
 " Use CTRL-S for saving, also in Insert mode
 noremap <C-S> :update<CR>
 vnoremap <C-S> <C-C>:update<CR>
@@ -94,5 +91,10 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
+
+autocmd vimenter * if !argc() | NERDTree | endif
 
 execute pathogen#infect()
