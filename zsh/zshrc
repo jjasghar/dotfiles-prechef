@@ -46,19 +46,32 @@ autoload -U zmv
 
 alias ls="ls -G"
 alias be="bundle exec"
-alias vim='open -a MacVim.app'
+alias dbmon='ssh -X -A -p 30456 jasghar@dbmon.pacloud.net'
+alias o='ssh ops01.pacloud.net'
+alias oo='ssh jasghar@j2a.uk.to'
+alias c='ssh chef.pacloud.net'
 alias v='vim'
+alias vd='vimdiff'
 alias n='cd ~/Dropbox/Notes/'
+alias boot_nova='nova boot --flavor 5 --image d531a2dd-7ae9-4407-bb5a-e5ea03303d98 testbox && bash ~/repo/operations/nova/boot_watch.sh testbox'
+alias boot_knife="knife rackspace server create --server-name test-`date +%F` -N test-`date +%F` -E infrastructure -f 4 -I d4c7b93d-9f18-45dc-aa7c-3e3b126e3792 -r 'role[base]'"
 alias speedtest_500='wget --output-document=/dev/null http://speedtest.wdc01.softlayer.com/downloads/test500.zip'
 alias ss='vim ~/scratchfile'
 alias s='ssh'
 alias gist='gist -c -p'
 alias grep='grep --color'
 alias chef_zero='ruby -e "require 'chef_zero/server'; server = ChefZero::Server.new(:port => 8889); server.start"'
+alias shells='ssh jjasghar@shells.ohai.su'
 alias disappoint="echo ಠ_ಠ"
 alias web_host="ruby -run -e httpd . -p 5000"
+alias sp="supernova private"
+alias spu="supernova public"
 alias ard_stop="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate -stop"
 alias ard_restart="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -privs -all -restart -agent"
+alias :q='exit'
+alias cv='camper_van &!'
+alias pr='hub pull-request'
+
 
 # git aliases
 alias ga="git add"
@@ -75,6 +88,7 @@ alias gs="git status -sb"
 alias glp="git log --graph --pretty --all"
 alias gld="git log --graph --decorate --all"
 alias git-merge-cleanup="git branch --merged | grep -v "\*" | xargs -n 1 git branch -d"
+alias mas="git checkout master"
 
 alias gv='gvim -p $(git status --short |egrep "^ M " | cut -d" " -f3) -c "tabdo Gdiff"'
 
@@ -82,6 +96,11 @@ alias gv='gvim -p $(git status --short |egrep "^ M " | cut -d" " -f3) -c "tabdo 
 alias k="knife"
 
 # a global alias
+#alias wprc="wc -l ~/.procmailrc"
+#alias cprc="cp ~/.procmailrc ~/.procmailrc.safe"
+#alias eprc="emacs ~/.procmailrc"
+#Instead, you can use a global alias for the file. To define a global alias, use the -g argument to the alias command.
+#alias -g prc=~/.procmailrc
 alias -g L="|less" # Write L after a command to page through the output.
 alias -g TL='| tail -20'
 alias -g NUL="> /dev/null 2>&1" # You get the idea.
@@ -179,9 +198,13 @@ RPS1='%m $(git_prompt_string)' #$(rvm_ruby_prompt)$(rvm_gem_set)'
 
 
 # sources
+source ~/Dropbox/configs/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/Dropbox/configs/z
 
 # exports
 export EDITOR=vim
+export GPGKEY=B4D46649
+export GOPATH=/Users/jasghar/go
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:
 export PDFCOMBINER_PEM=/Users/jasghar/.ssh/pdfcombiner.pem
 
@@ -252,10 +275,17 @@ function table() {
 }
 
 #s3put fuction
+function s3_put_public() { 
+  s3cmd put -P $* s3://jjasghar/public/ 
+}
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
 
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
 
+# added by travis gem
+[ -f /Users/jasghar/.travis/travis.sh ] && source /Users/jasghar/.travis/travis.sh
