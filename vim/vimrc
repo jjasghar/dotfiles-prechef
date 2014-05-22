@@ -9,9 +9,12 @@ autocmd FileType bash,bats set filetype=bash.bats
 
 " common misspelled words
 iabbrev teh the
+iabbrev Teh The
 iabbrev accross across
 iabbrev ipry require 'pry' ; binding.pry
-iabbrev sao save_and_open_page; 
+iabbrev sao save_and_open_page;
+iabbrev lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+iabbrev llorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
 
 set laststatus=2
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
@@ -29,9 +32,6 @@ map <F11> :set nopaste<CR>
 imap <F10> <C-O>:set paste<CR>
 imap <F11> <nop>
 set pastetoggle=<F11>
-
-" undotree
-nnoremap <F5> :UndotreeToggle<cr>
 
 " <Ctrl-l> redraws the screen and removes any search highlighting.
 nnoremap <silent> <C-l> :nohl<CR><C-l>
