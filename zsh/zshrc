@@ -71,7 +71,7 @@ alias ard_restart="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.a
 alias :q='exit'
 alias cv='camper_van &!'
 alias pr='hub pull-request'
-
+alias roll='[ $[ $RANDOM % 6  ] = 0  ] && echo "BOOM" || echo "Lucky bastard"'
 
 # git aliases
 alias ga="git add"
