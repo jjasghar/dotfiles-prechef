@@ -1,0 +1,239 @@
+
+;; My .emacs -- "Alot stolen, some found"
+;; Author: Jonathan "JJ" Asghar
+;; Time-stamp: <2012-07-13 15:52:55 (asgharje)>
+
+;;
+;; ########## General Settings ##########
+;;
+ 
+;; ##### global variables #####
+;;(global-hl-line-mode t)					;; enable line highlighting
+(global-set-key (kbd "C-c C-x") 'comment-dwim)		;; comment with C-c C-x
+(global-set-key "\C-w" 'backward-kill-word)		;; setting C-w to kill word 
+(global-set-key "\C-x\C-k" 'kill-region)
+(global-set-key "\C-c\C-k" 'kill-region)
+(global-set-key (kbd "M-RET") 'ns-toggle-fullscreen)
+
+(setq user-mail-address "jjasghar@utexas.edu")
+(setq user-full-name "JJ Asghar")
+
+;; ### ediff ###
+(setq ediff-split-window-function 'split-window-horizontally)
+
+;;(setq mac-option-modifier 'meta)
+;;(setq mac-command-modifier 'meta)
+
+(setq-default ispell-program-name "/opt/local/bin/ispell")
+(setq-default ispell-list-command "list")
+
+
+;; ##### global setq's #####
+(setq inhibit-splash-screen t)				;; Shut-up the welcome message
+(setq tramp-default-method "ssh")			;; set default tramp mode
+(setq tramp-verbose 8)
+(setq frame-title-format '(system-name " %b %+%+ %f"))	;; Enabling window title frame
+(setq display-time-day-and-date t) (display-time)	;; will make the display of date and time persistent. 
+(setq default-major-mode 'text-mode)			;; will make text-mode default. (maybe org-mode later!?!?)
+(setq initial-scratch-message "ಠ_ಠ and (╯°□°）╯︵ ┻━┻ and ┬──┬ ﻿ノ( ゜-゜ノ) and t(-_-)t and ಥ_ಥ ")			;; empty out the comments on the scratch buffer, (i hate that text)		
+
+;; ##### single line requires #####
+;;(require 'erc)						;; erc - start via M-x erc --> emacs irc 
+
+;;(require 'git)						;; Emacs-git
+;;(require 'midnight)					;; enabling "midnight mode"
+
+
+;; ##### misc varibles #####
+(add-to-list 'load-path "~/.emacs.d/")						;; adding loadpath (you never know where it might need to be)
+(fset 'yes-or-no-p 'y-or-n-p)							;; will allow you to type just "y" instead of "yes" when you exit. 
+      		   								;; <stolen from http://xenon.stanford.edu/~manku/dotemacs.html>
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p) ;; enable script automagic
+
+
+;; ########## auto loads ##########
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.pp$"  . python-mode))
+
+
+
+;; ##### backup directories #####
+(make-directory "~/.emacs.d/autosaves/" t)	;; create the autosave dir if necessary, since emacs won't.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#ad7fa8" "#8cc4ff" "#eeeeec"])
+ '(auto-save-file-name-transforms (quote ((".*" "~/.emacs.d/autosaves/\\1" t))))
+ '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/"))))
+ '(custom-enabled-themes (quote (wheatgrass)))
+ '(display-time-mode t)
+ '(erc-ignore-list nil)
+ '(tool-bar-mode nil))
+
+;;
+;; ########## Time-stamp: <> or Time-stamp: " " ##########
+;; NOTE: ;; timestamps? run it by M-x time-stamp
+(setq								;;
+  time-stamp-active t						;; do enable time-stamps
+  time-stamp-line-limit 10					;; check first 10 buffer lines for Time-stamp: 
+  time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)")	;; date format 
+(add-hook 'write-file-hooks 'time-stamp)			;; update when saving
+
+
+;;
+;; ########## ido ##########
+;;
+(require 'ido)
+(ido-mode t)
+(setq ido-enable-flex-matching t)                                               ;; enable fuzzy_matching
+
+;;
+;; ########## org-mode ##########
+;;
+(require 'org)
+(setq org-src-fontify-natively t)
+
+(define-key global-map					"\C-cl" 'org-store-link)
+(define-key global-map					"\C-ca" 'org-agenda)
+(setq org-hide-leading-stars t)
+(setq org-agenda-files (list				"~/org/todo.org"
+							"~/org/notes.org"
+							"~/org/work_log.org"))
+(setq org-todo-keywords
+      '((sequence					"TODO" "WAITING" "|" "DONE")
+	(sequence					"FOLLOWUP" "LASTCONTACT" "|" "COMPLETE")))
+(setq org-mobile-inbox-for-pull				"~/org/captured.org")                         ;; Set to the name of the file where new notes will be stored
+(setq org-mobile-directory				"~/Dropbox/MobileOrg")                             ;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-directory					"~/org/")
+(setq org-default-notes-file (concat org-directory	"/notes.org"))
+(define-key global-map					"\C-cc" 'org-capture)
+(setq org-capture-templates                                                                                ;; Capture-Mode
+    '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+             "* TODO %?\n  %i\n  %a")
+      ("j" "Journal" entry (file+datetree "~/org/journal.org")
+             "* %?\nEntered on %U\n  %i\n  %a")
+      ("n" "notes" entry (file+datetree "~/org/notes.org")
+             "* %?\nEntered on %U\n  %i\n  %a")))
+;;
+;; org-publish booya!
+;;
+(require 'org-publish)
+(setq org-publish-project-alist
+           '(
+	     ("local-notes"
+              :base-directory "~/org/"
+	      :base-extention "org"
+              :publishing-directory "~/Sites/"
+              :section-numbers nil
+              :table-of-contents nil
+	      :publishing-function org-publish-org-to-html
+	      :auto-preamble t
+	      :recursive t
+	     )
+	     ("local-static"
+	      :base-directory "~/org/"
+	      :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+	      :publishing-directory "~/Sites/"
+	      :recursive t
+	      :publishing-function org-publish-attachment
+	      )
+	     ("local" 
+	      :components (
+			   "local-notes"
+			   "local-static"
+			   )
+	      )
+	     ("remote-notes"
+              :base-directory "~/org/"
+	      :base-extention "org"
+              :publishing-directory "/ssh:asgharje@128.83.93.150:/usr/local/www/"
+              :section-numbers nil
+              :table-of-contents nil
+	      :publishing-function org-publish-org-to-html
+	      :auto-preamble t
+	      :recursive t
+	     )
+	     ("remote-static"
+	      :base-directory "~/org/"
+	      :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+              :publishing-directory "/ssh:asgharje@128.83.93.150:/usr/local/www/"
+	      :recursive t
+	      :publishing-function org-publish-attachment
+	      )
+	     ("remote" 
+	      :components (
+			   "remote-notes"
+			   "remote-static"
+			   )
+	      )
+	   )
+)
+
+;;
+;; counting words? stolen from emacs-fu
+;;
+(defun jj-count-words (&optional begin end) 
+  "count words between BEGIN and END (region); if no region defined, count words in buffer"
+  (interactive "r")
+  (let ((b (if mark-active begin (point-min)))
+      (e (if mark-active end (point-max))))
+    (message "Word count: %s" (how-many "\\w+" b e))))
+
+
+;;
+;; ########## disabling "easymode" ##########
+;; stolen from:  http://danamlund.dk/emacs/no-easy-keys.html
+;;
+(defvar no-easy-keys-minor-mode-map (make-keymap) 
+  "no-easy-keys-minor-mode keymap.")
+(let ((f (lambda (m)
+           `(lambda () (interactive) 
+              (message (concat "Stop it jackass! use " ,m " instead."))))))
+  (dolist (l '(("<left>" . "C-b") ("<right>" . "C-f") ("<up>" . "C-p")
+               ("<down>" . "C-n")
+               ("<C-left>" . "M-b") ("<C-right>" . "M-f") ("<C-up>" . "M-{")
+               ("<C-down>" . "M-}")
+               ("<M-left>" . "M-b") ("<M-right>" . "M-f") ("<M-up>" . "M-{")
+               ("<M-down>" . "M-}")
+               ("<delete>" . "C-d") ("<C-delete>" . "M-d")
+               ("<M-delete>" . "M-d") ("<next>" . "C-v") ("<C-next>" . "M-x <")
+               ("<prior>" . "M-v") ("<C-prior>" . "M-x >") 
+               ("<home>" . "C-a") ("<C-home>" . "M->")
+               ("<C-home>" . "M-<") ("<end>" . "C-e") ("<C-end>" . "M->")))
+    (define-key no-easy-keys-minor-mode-map
+      (read-kbd-macro (car l)) (funcall f (cdr l)))))
+(define-minor-mode no-easy-keys-minor-mode
+  "A minor mode that disables the arrow-keys, pg-up/down, delete
+  and backspace."  t " no-easy-keys"
+  'no-easy-keys-minor-mode-map :global t) ;; change to a 0 to disable by default
+
+
+;; Journel stolen?
+(load "journal")
+      (if (file-directory-p "~/diary/")
+      (setq-default journal-dir "~/diary/"))
+
+;; htmlize
+(load "htmlize.el")
+
+;; markdown mode
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t) (setq auto-mode-alist (cons '("\\.text" . markdown-mode) auto-mode-alist))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+(require 'gnus)
+(setq nnml-directory "~/utmail")
+(setq message-directory "~/utmail")
+(setq gnus-select-method
+      '(nnimap	"utmail"
+      		(nnimap-address "wmail.austin.utexas.edu")
+		(nnimap-server-port 993)
+		(nnimap-stream ssl)))
