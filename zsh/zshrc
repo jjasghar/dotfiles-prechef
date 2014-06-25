@@ -72,12 +72,14 @@ alias :q='exit'
 alias cv='camper_van &!'
 alias pr='hub pull-request'
 alias roulette='[ $[ $RANDOM % 6  ] = 0  ] && echo "BOOM" || echo "Lucky bastard"'
+alias ctags="`brew --prefix`/bin/ctags"
 
 # git aliases
 alias ga="git add"
 alias gb="git branch"
 alias gc="git commit"
 alias gco="git checkout"
+alias gnpr="git log origin/master.. --oneline"
 alias gdh="git diff HEAD --stat"
 alias gf="git fetch"
 alias gpu="git push"
@@ -194,7 +196,7 @@ git_prompt_string() {
 }
 
 # Set the right-hand prompt
-RPS1='%m $(git_prompt_string)' #$(rvm_ruby_prompt)$(rvm_gem_set)'
+RPS1='$(git_prompt_string) $(rvm_gem_set) [%m]'
 
 
 # sources
