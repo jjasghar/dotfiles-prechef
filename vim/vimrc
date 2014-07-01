@@ -7,6 +7,9 @@ filetype plugin on
 autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
 autocmd FileType bash,bats set filetype=bash.bats
 
+" Convert form moduler to markdown
+autocmd BufRead,BufNewFile *.md,*.markdown set filetype=markdown
+
 " my abbreviations
 iabbrev teh the
 iabbrev Teh The
@@ -27,6 +30,8 @@ let g:gist_post_private = 1
 let g:gist_browser_command = 'open %URL% &'
 
 " my key mappings
+nmap j gj
+nmap k gk
 map <F10> :set paste<CR>
 map <F11> :set nopaste<CR>
 imap <F10> <C-O>:set paste<CR>
@@ -37,19 +42,23 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-" <Ctrl-l> redraws the screen and removes any search highlighting.
+" redraws the screen and removes any search highlighting.
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 let mapleader = "\<Space>"
 nmap <silent> <Leader>S :set spell<CR>
 nmap <silent> <Leader>s :set spell!<CR>
-nnoremap <Leader>w :w<CR>
-nnoremap <Leader>o :CtrlP<CR>
-nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>b :ls<CR>:buffer
-" nnoremap <Leader>c :!coffee %<CR>
-let g:vimrubocop_keymap = 0
-nnoremap <Leader>R :RuboCop<CR>
+nnoremap <Leader>c :!coffee %<CR>
+" open a new tab with no file
+nnoremap <Leader>h :tabe <CR>
+nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>r :!ruby %<CR>
+nnoremap <Leader>R :RuboCop<CR>
+nnoremap <Leader>t :CtrlPTag<CR>
+nnoremap <Leader>w :w<CR>
+" this will take the first suggested for spelling
+nnoremap <Leader>z 1z=
+let g:vimrubocop_keymap = 0
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>" viw<ESC>a"<ESC>hbi"<ESC>lel
@@ -80,7 +89,7 @@ set shiftwidth=2
 set expandtab
 set autoindent          " fix copying in with the stupid indendets
 set autochdir           " so i don't have to keep traversing directories
-set nocompatible        " use vim defaults
+set nocompatible        " use vim defaults this is to make it no longer compatible with vi, it's not the 80s guys
 set scrolloff=3         " keep 3 lines when scrolling
 set ai                  " set auto-indenting on for programming
 set relativenumber
@@ -108,6 +117,24 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
+" swap and directorys
+set noswapfile
+set backup
+
+set undodir=~/.vim/tmp/undo/
+set backupdir=~/.vim/tmp/backup/
+set directory=~/.vim/tmp/swap/
+
+
+" Make views automatic/leave and stay in the same spot:
+" http://vim.wikia.com/wiki/Make_views_automatic
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent loadview
+
+" Remove hlsearch in instert mode
+autocmd InsertEnter * setlocal nohlsearch
+autocmd InsertLeave * setlocal hlsearch
 
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
