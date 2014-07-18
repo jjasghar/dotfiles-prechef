@@ -14,7 +14,6 @@ precmd(){
   echo -ne "\e]1;$PWD\a"
 }
 
-
 PROMPT="%B%*%b [%~] %% "
 
 # adding vi bindings
@@ -73,12 +72,20 @@ alias cv='camper_van &!'
 alias pr='hub pull-request'
 alias roulette='[ $[ $RANDOM % 6  ] = 0  ] && echo "BOOM" || echo "Lucky bastard"'
 alias ctags="`brew --prefix`/bin/ctags"
+alias rgl="rvm gemset list"
+alias rgu="rvm gemset use"
+alias rgd="rvm gemset delete"
+alias rgc="rvm use 2.1.1@`date +%F` --create"
+alias rgg="rvm use 2.1.1@`date +%F`"
 
 # git aliases
 alias ga="git add"
 alias gb="git branch"
 alias gc="git commit"
+alias gca="git commit --amend"
 alias gco="git checkout"
+alias gr="git review"
+alias grr="git review -R"
 alias gnpr="git log origin/master.. --oneline"
 alias gdh="git diff HEAD --stat"
 alias gf="git fetch"
@@ -198,7 +205,6 @@ git_prompt_string() {
 # Set the right-hand prompt
 RPS1='$(git_prompt_string) $(rvm_gem_set) [%m]'
 
-
 # sources
 source ~/Dropbox/configs/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/Dropbox/configs/z
@@ -209,7 +215,6 @@ export GPGKEY=B4D46649
 export GOPATH=/Users/jasghar/go
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages:
 export PDFCOMBINER_PEM=/Users/jasghar/.ssh/pdfcombiner.pem
-
 
 # adding color coding to the list
 zstyle -e ':completion:*:default' list-colors 'reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:${(s.:.)LS_COLORS}")'
@@ -281,13 +286,10 @@ function s3_put_public() {
   s3cmd put -P $* s3://jjasghar/public/ 
 }
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
-
-
-#PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
 # added by travis gem
 [ -f /Users/jasghar/.travis/travis.sh ] && source /Users/jasghar/.travis/travis.sh
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
