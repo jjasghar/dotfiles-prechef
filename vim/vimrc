@@ -6,6 +6,7 @@ filetype indent on      " load indent file for specific file type
 filetype plugin on
 autocmd FileType ruby,eruby set filetype=ruby.eruby.chef
 autocmd FileType bash,bats set filetype=bash.bats
+set t_Co=256
 
 " Convert form moduler to markdown
 autocmd BufRead,BufNewFile *.md,*.markdown set filetype=markdown
@@ -19,7 +20,7 @@ iabbrev ipry require 'pry' ; binding.pry
 iabbrev sao save_and_open_page;
 iabbrev lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 iabbrev llorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-iabbrev @@ jj.asghar@peopleadmin.com
+iabbrev @@ jj@getchef.com
 iabbrev ccopy Copyright 2014 Jonathan Asghar, all rights reserved.
 iabbrev ssig --<CR>JJ Asghar<CR>jjasghar@gmail.com
 
@@ -51,6 +52,10 @@ nnoremap <Leader>b :ls<CR>:buffer
 nnoremap <Leader>c :!coffee %<CR>
 " open a new tab with no file
 nnoremap <Leader>h :tabe <CR>
+nnoremap <Leader>n :set number<CR>
+nnoremap <Leader>nn :set number!<CR>
+nnoremap <Leader>nr :set relativenumber<CR>
+nnoremap <Leader>nrr :set relativenumber!<CR>
 nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>r :!ruby %<CR>
 nnoremap <Leader>R :RuboCop<CR>
@@ -92,7 +97,6 @@ set autochdir           " so i don't have to keep traversing directories
 set nocompatible        " use vim defaults this is to make it no longer compatible with vi, it's not the 80s guys
 set scrolloff=3         " keep 3 lines when scrolling
 set ai                  " set auto-indenting on for programming
-set relativenumber
 set pastetoggle=<F11>
 set showcmd             " display incomplete commands
 set nobackup            " do not keep a backup file
@@ -138,8 +142,6 @@ autocmd InsertLeave * setlocal hlsearch
 
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
-
-autocmd vimenter * if !argc() | NERDTree | endif
 
 execute pathogen#infect()
 
