@@ -1,0 +1,13 @@
+;;; magit-gerrit-autoloads.el --- automatically extracted autoloads
+;;
+;;; Code:
+
+
+(provide 'magit-gerrit-autoloads)
+;; Local Variables:
+;; version-control: never
+;; no-byte-compile: t
+;; no-update-autoloads: t
+;; coding: utf-8
+;; End:
+;;; magit-gerrit-autoloads.el ends here

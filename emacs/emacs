@@ -14,6 +14,27 @@
 (setq mac-option-modifier nil)
 (server-start) ;; so it's listening for the emacsclient alias
 (setq ns-pop-up-frames nil) ;; keep OSX from opening more windows
+;; 'y' instead of 'yes'
+(fset 'yes-or-no-p 'y-or-n-p)
+;; always use spaces, never tabs
+(setq-default indent-tabs-mode nil)
+;; skip startup message
+(setq inhibit-startup-message t)
+(global-set-key "\C-cc" 'comment-region)
+(global-set-key "\C-cu" 'uncomment-region)
+;; indent-region
+(global-set-key "\C-ci" 'indent-region)
+
+;; backup files because well backupfiles
+(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-by-copying t)
+(setq delete-old-versions t
+  kept-new-versions 6
+  kept-old-versions 2
+  version-control t)
+
+;; additional load-path
+(add-to-list 'load-path "~/.emacs.d/plugins/")
 
 ;; homebrew fix
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
@@ -31,6 +52,25 @@
   ispell-extra-args '("--sug-mode=ultra"))
 (global-set-key (kbd "M-s M-s") 'ispell-word)
 
+;; ido mode
+(require 'ido)
+(ido-mode t)
+
+;; orgmode
+(setq org-log-done 'time)
+(setq org-default-notes-file (concat "~/org/notes.org"))
+(define-key global-map "\C-ct" 'org-capture)
+
+;; show column markers
+(require 'column-marker)
+(add-hook 'python-mode-hook (lambda () (interactive) (column-marker-1 80)))
+(add-hook 'ruby-mode-hook (lambda () (interactive) (column-marker-1 80)))
+(add-hook 'markdown-mode-hook (lambda () (interactive) (column-marker-1 80)))
+(add-hook 'diff-mode-hook (lambda () (interactive) (column-marker-1 80)))
+(add-hook 'rst-mode-hook (lambda () (interactive) (column-marker-1 80)))
+(add-to-list 'auto-mode-alist '("COMMIT_EDITMSG" . diff-mode))
+
+;; messing with fonts for macs
 (when (eq system-type 'darwin)
 
   ;; default Latin font (e.g. Consolas)
@@ -57,13 +97,15 @@
 ;; Add MELPA for packages --> http://melpa.milkbox.net/
 (require 'package)
 
-;;; here there's a variable named package-archives, and we are adding the MELPA repository to it
+;; here there's a variable named package-archives, and we are adding the MELPA repository to it
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;;; loads packages and activates them
+;; loads packages and activates them
 (package-initialize)
 
+
+;; markdown major mode (broken i think)
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
