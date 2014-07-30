@@ -1,8 +1,42 @@
+;;
+;;
+;; my emacs configuration
+;;
+;;
+
+;;
+;; General Settings I like
+;;
+
 ;; Converted to the wombat theme
 ;; I also like the wheatgrass, but lets start here
 (load-theme 'wombat t)
+;; Turn on line numbers
+(global-linum-mode t)
+;; Show paren mode (http://www.emacswiki.org/emacs/ShowParenMode)
+(show-paren-mode 1)
+;; backup files because well backupfiles
+(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-by-copying t)
+(setq delete-old-versions t
+  kept-new-versions 6
+  kept-old-versions 2
+  version-control t
+)
+;; default to text mode
+(setq-default major-mode 'text-mode)
 
-;; stolen from mattray
+;; tack on flyspell to text
+(add-hook 'text-mode-hook 'flyspell-mode)
+(setq ispell-program-name "aspell"
+  ispell-extra-args '("--sug-mode=ultra"))
+(global-set-key (kbd "M-s M-s") 'ispell-word)
+
+
+;;
+;; Stolen from mattray
+;;
+
 ;; OSX SETTINGS
 (setq default-frame-alist
       '((top . 25) (left . 1)
@@ -24,14 +58,29 @@
 (global-set-key "\C-cu" 'uncomment-region)
 ;; indent-region
 (global-set-key "\C-ci" 'indent-region)
+;; text size
+(global-set-key "\M-+" 'text-scale-increase)
+(global-set-key "\M-_" 'text-scale-decrease)
+;;
+;; end of the stealing from mattray
+;;
 
-;; backup files because well backupfiles
-(setq backup-directory-alist `(("." . "~/.saves")))
-(setq backup-by-copying t)
-(setq delete-old-versions t
-  kept-new-versions 6
-  kept-old-versions 2
-  version-control t)
+;;
+;; Extentions to emacs
+;;
+
+;; Add MELPA for packages --> http://melpa.milkbox.net/
+(require 'package)
+
+;; here there's a variable named package-archives, and we are adding the MELPA repository to it
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
+;; loads packages and activates them
+(package-initialize)
+
+;; Everyone loves snippets
+(yas-global-mode 1)
 
 ;; additional load-path
 (add-to-list 'load-path "~/.emacs.d/plugins/")
@@ -39,18 +88,6 @@
 ;; homebrew fix
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (setq exec-path (append exec-path '("/usr/local/bin")))
-
-;; Show paren mode (http://www.emacswiki.org/emacs/ShowParenMode)
-(show-paren-mode 1)
-
-;; default to text mode
-(setq-default major-mode 'text-mode)
-
-;; tack on flyspell to text
-(add-hook 'text-mode-hook 'flyspell-mode)
-(setq ispell-program-name "aspell"
-  ispell-extra-args '("--sug-mode=ultra"))
-(global-set-key (kbd "M-s M-s") 'ispell-word)
 
 ;; ido mode
 (require 'ido)
@@ -90,20 +127,6 @@
 
   ;; you may want to add different for other charset in this way.
 )
-
-;; Turn on line numbers
-(global-linum-mode t)
-
-;; Add MELPA for packages --> http://melpa.milkbox.net/
-(require 'package)
-
-;; here there's a variable named package-archives, and we are adding the MELPA repository to it
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
-;; loads packages and activates them
-(package-initialize)
-
 
 ;; markdown major mode (broken i think)
 (autoload 'markdown-mode "markdown-mode"
