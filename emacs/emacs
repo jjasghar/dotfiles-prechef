@@ -12,7 +12,9 @@
 ;; I also like the wheatgrass, but lets start here
 (load-theme 'wombat t)
 ;; Turn on line numbers
-(global-linum-mode t)
+;;(global-linum-mode t)
+;; Turn off the useless toolbar
+(tool-bar-mode -1)
 ;; Show paren mode (http://www.emacswiki.org/emacs/ShowParenMode)
 (show-paren-mode 1)
 ;; backup files because well backupfiles
@@ -26,12 +28,38 @@
 ;; default to text mode
 (setq-default major-mode 'text-mode)
 
+;; display date and time
+(setq display-time-day-and-date t) (display-time)
+
+;; highlight incremental search
+(setq query-replace-highlight t)
+
+;; make a larger buffer for M-x shell
+(setq comint-buffer-maximum-size 10240)
+
 ;; tack on flyspell to text
 (add-hook 'text-mode-hook 'flyspell-mode)
 (setq ispell-program-name "aspell"
   ispell-extra-args '("--sug-mode=ultra"))
 (global-set-key (kbd "M-s M-s") 'ispell-word)
 
+;; Lorem-ipsum stuff
+(autoload 'Lorem-ipsum-insert-paragraphs "lorem-ipsum" "" t)
+(autoload 'Lorem-ipsum-insert-sentences "lorem-ipsum" "" t)
+(autoload 'Lorem-ipsum-insert-list "lorem-ipsum" "" t)
+
+;; Kill all other buffers
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+
+;; create scratch buffer
+(defun create-scratch-buffer nil
+  "create a scratch buffer"
+  (interactive)
+  (switch-to-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode))
 
 ;;
 ;; Stolen from mattray
@@ -62,6 +90,8 @@
 ;; text size
 (global-set-key "\M-+" 'text-scale-increase)
 (global-set-key "\M-_" 'text-scale-decrease)
+;; ace-jump-mode
+(global-set-key (kbd "C-x SPC") 'ace-jump-char-mode)
 ;;
 ;; end of the stealing from mattray
 ;;
@@ -135,3 +165,57 @@
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+
+;;
+;; Stolen from whattheemacsd.com
+;;
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
+
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
+;; only turn on line numbers when GoTo line is on
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
+
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line number input"
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (goto-line (read-number "Goto line: ")))
+    (linum-mode -1)))
+
+;; bind webjump to C-x g http://www.neilvandyke.org/webjump/webjump.el
+(global-set-key (kbd "C-x g") 'webjump)
+(setq webjump-sites
+         (append '(
+                   ("Chef Docs"    . "docs.getchef.com/search.html")
+                   ("Github"   . "www.github.com/")
+                   ("Twitter"   . "www.twitter.com/")
+                   ("Google"   .
+                    [simple-query "www.google.com" "www.google.com/search?q=" ""])
+                   ("Google Groups" .
+                    [simple-query "groups.google.com" "groups.google.com/groups?q=" ""])
+                    ("IMDB" .
+                     [simple-query "www.imdb.com" "www.imdb.com/Find?select=All&for=" ""])
+                    ("Geektools Whois" .
+                     [simple-query "www.geektools.com/whois.html"
+                                   "www.geektools.com/geektools-cgi/whois.cgi?query=" ""])
+                    ("Wikipedia" .
+                     [simple-query "en.wikipedia.org" "http://en.wikipedia.org/w/index.php?search=" ""])
+
+                   )))
+
+;;
+;;
+;;
+
+(split-window-horizontally)   ;; want two windows at startup
+(other-window 1)              ;; move to other window
+(shell)                       ;; start a shell
+(rename-buffer "shell-first") ;; rename it
+(other-window 1)              ;; move back to first window
