@@ -11,8 +11,8 @@
 ;; Converted to the wombat theme
 ;; I also like the wheatgrass, but lets start here
 (load-theme 'wombat t)
-;; Turn on line numbers
-;;(global-linum-mode t)
+;; default tramp to ssh
+(setq tramp-default-method "ssh")
 ;; Turn off the useless toolbar
 (tool-bar-mode -1)
 ;; Show paren mode (http://www.emacswiki.org/emacs/ShowParenMode)
@@ -42,6 +42,17 @@
 (setq ispell-program-name "aspell"
   ispell-extra-args '("--sug-mode=ultra"))
 (global-set-key (kbd "M-s M-s") 'ispell-word)
+
+;; visual-regex
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
+;; if you use multiple-cursors, this is for you:
+(define-key global-map (kbd "C-c m") 'vr/mc-mark)
+
+;; dash-at-point
+(global-set-key "\C-cd" 'dash-at-point)
+(global-set-key "\C-ce" 'dash-at-point-with-docset)
+(add-to-list 'dash-at-point-mode-alist '(ruby-mode . "chef"))
 
 ;; Lorem-ipsum stuff
 (autoload 'Lorem-ipsum-insert-paragraphs "lorem-ipsum" "" t)
