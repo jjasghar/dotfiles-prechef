@@ -124,6 +124,10 @@
 (require 'ido)
 (ido-mode t)
 
+;; multicursors
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+
 ;; orgmode
 (setq org-log-done 'time)
 (setq org-default-notes-file (concat "~/org/notes.org"))
@@ -193,20 +197,21 @@
 (global-set-key (kbd "C-x g") 'webjump)
 (setq webjump-sites
          (append '(
-                   ("Chef Docs"    . "docs.getchef.com/search.html")
-                   ("Github"   . "www.github.com/")
-                   ("Twitter"   . "www.twitter.com/")
-                   ("Google"   .
+                   ("Chef Docs"           . "docs.getchef.com/search.html")
+                   ("Geektools Whois"     .
+                    [simple-query "www.geektools.com/whois.html"
+                                  "www.geektools.com/geektools-cgi/whois.cgi?query=" ""])
+                   ("Github"              . 
+                    [simple-query "www.github.com" "https://github.com/search?utf8=✓&q=" ""])
+                   ("Google"              .
                     [simple-query "www.google.com" "www.google.com/search?q=" ""])
-                   ("Google Groups" .
+                   ("Google Groups"       .
                     [simple-query "groups.google.com" "groups.google.com/groups?q=" ""])
-                    ("IMDB" .
-                     [simple-query "www.imdb.com" "www.imdb.com/Find?select=All&for=" ""])
-                    ("Geektools Whois" .
-                     [simple-query "www.geektools.com/whois.html"
-                                   "www.geektools.com/geektools-cgi/whois.cgi?query=" ""])
-                    ("Wikipedia" .
-                     [simple-query "en.wikipedia.org" "http://en.wikipedia.org/w/index.php?search=" ""])
+                    ("IMDB"               .
+                     [simple-query "www.imdb.com"  "www.imdb.com/find?q=" ""])
+                    ("Twitter"            . "www.twitter.com/")
+                    ("Wikipedia"          .
+                     [simple-query "en.wikipedia.org" "en.wikipedia.org/w/index.php?search=" ""])
 
                    )))
 
