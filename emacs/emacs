@@ -245,11 +245,13 @@
 ;;
 ;;
 
-;; google-this
+;; google-this 
 (global-set-key (kbd "C-x C-g") 'google-this)
 
 ;; magit-status
 (global-set-key (kbd "C-c g") 'magit-status)
+(delq (assoc "COMMIT_EDITMSG$" auto-mode-alist) auto-mode-alist)
+
 
 (split-window-horizontally)   ;; want two windows at startup
 (other-window 1)              ;; move to other window
