@@ -259,6 +259,33 @@
 ;; (rename-buffer "shell-first") ;; rename it
 ;; (other-window 1)              ;; move back to first window
 
+;; transpose buffers http://www.emacswiki.org/emacs/TransposeWindows
+(defun transpose-windows (arg)
+  "Transpose the buffers shown in two windows."
+  (interactive "p")
+  (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
+    (while (/= arg 0)
+      (let ((this-win (window-buffer))
+            (next-win (window-buffer (funcall selector))))
+        (set-window-buffer (selected-window) next-win)
+        (set-window-buffer (funcall selector) this-win)
+        (select-window (funcall selector)))
+      (setq arg (if (plusp arg) (1- arg) (1+ arg))))))
+
+ ;; buffer resize http://www.emacswiki.org/emacs/WindowResize
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
+;; my first fuction in emacs :)
+(defun reddit-emacs ()
+  "Opens up reddit-emacs"
+  (interactive)
+  (browse-url "http://reddit.com/r/emacs"))
+(global-set-key (kbd "C-x C-r") 'reddit-emacs)
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
