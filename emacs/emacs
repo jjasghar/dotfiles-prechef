@@ -1,5 +1,4 @@
 ;;
-;;
 ;; my emacs configuration
 ;;
 ;;
@@ -27,6 +26,11 @@
 )
 ;; default to text mode
 (setq-default major-mode 'text-mode)
+
+;; fix autscrolling because its fucking lame
+(setq scroll-step 1)
+(setq scroll-conservatively 10000)
+(setq auto-window-vscroll nil)
 
 ;; fixing up the scratch buffer
 (setq initial-major-mode 'ruby-mode)
@@ -250,17 +254,15 @@
 
 ;; magit-status
 (global-set-key (kbd "C-c g") 'magit-status)
-(delq (assoc "COMMIT_EDITMSG$" auto-mode-alist) auto-mode-alist)
 
-
-(split-window-horizontally)   ;; want two windows at startup
-(other-window 1)              ;; move to other window
+;; (split-window-horizontally)   ;; want two windows at startup
+;; (other-window 1)              ;; move to other window
 ;; (shell)                       ;; start a shell
 ;; (rename-buffer "shell-first") ;; rename it
 ;; (other-window 1)              ;; move back to first window
 
 ;; transpose buffers http://www.emacswiki.org/emacs/TransposeWindows
-(defun transpose-windows (arg)
+(defun transpose-buffers (arg)
   "Transpose the buffers shown in two windows."
   (interactive "p")
   (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
@@ -285,6 +287,14 @@
   (browse-url "http://reddit.com/r/emacs"))
 (global-set-key (kbd "C-x C-r") 'reddit-emacs)
 
+
+;; git-gutter mode
+(add-hook 'ruby-mode-hook 'git-gutter-mode)
+(custom-set-variables
+ '(git-gutter:added-sign "+")    ;; multiple character is OK
+ '(git-gutter:deleted-sign "-"))
+
+(require 'ansi-color)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
