@@ -7,9 +7,6 @@
 ;; General Settings I like
 ;;
 
-;; Converted to the wombat theme
-;; I also like the wheatgrass, but lets start here
-(load-theme 'wombat t)
 ;; default tramp to ssh
 (setq tramp-default-method "ssh")
 ;; Turn off the useless toolbar
@@ -137,8 +134,15 @@
 ;; loads packages and activates them
 (package-initialize)
 
+;; Converted to the solarized-dark theme
+;; I also like the wombat,wheatgrass, but lets start here
+(load-theme 'solarized-dark t)
+
 ;; Everyone loves snippets
 (yas-global-mode 1)
+
+;; adding autopair mode
+(autopair-global-mode)
 
 ;; additional load-path
 (add-to-list 'load-path "~/.emacs.d/plugins/")
@@ -200,7 +204,6 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-
 ;;
 ;; Stolen from whattheemacsd.com
 ;;
@@ -245,21 +248,11 @@
 
                    )))
 
-;;
-;;
-;;
-
 ;; google-this 
 (global-set-key (kbd "C-x C-g") 'google-this)
 
 ;; magit-status
 (global-set-key (kbd "C-c g") 'magit-status)
-
-;; (split-window-horizontally)   ;; want two windows at startup
-;; (other-window 1)              ;; move to other window
-;; (shell)                       ;; start a shell
-;; (rename-buffer "shell-first") ;; rename it
-;; (other-window 1)              ;; move back to first window
 
 ;; transpose buffers http://www.emacswiki.org/emacs/TransposeWindows
 (defun transpose-buffers (arg)
@@ -287,24 +280,15 @@
   (browse-url "http://reddit.com/r/emacs"))
 (global-set-key (kbd "C-x C-r") 'reddit-emacs)
 
-
 ;; git-gutter mode
 (add-hook 'ruby-mode-hook 'git-gutter-mode)
-(custom-set-variables
- '(git-gutter:added-sign "+")    ;; multiple character is OK
- '(git-gutter:deleted-sign "-"))
-
-(require 'ansi-color)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(git-gutter:added-sign "+")
+ '(git-gutter:deleted-sign "-")
  '(uniquify-buffer-name-style (quote post-forward) nil (uniquify)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+(require 'ansi-color)
