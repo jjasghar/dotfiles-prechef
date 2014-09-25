@@ -8,7 +8,7 @@
 ;;
 
 ;; default tramp to ssh
-(setq tramp-default-method "ssh")
+;;(setq tramp-default-method "ssh")
 ;; Turn off the useless toolbar
 (tool-bar-mode -1)
 ;; Show paren mode (http://www.emacswiki.org/emacs/ShowParenMode)
@@ -23,6 +23,8 @@
 )
 ;; default to text mode
 (setq-default major-mode 'text-mode)
+;; blink instead of beep
+(setq visible-bell t)
 
 ;; show that damn whitespace
 (setq show-trailing-whitespace t)
@@ -69,8 +71,9 @@
 ;; visual-regex
 (define-key global-map (kbd "C-c r") 'vr/replace)
 (define-key global-map (kbd "C-c q") 'vr/query-replace)
-;; if you use multiple-cursors, this is for you:
-(define-key global-map (kbd "C-c m") 'vr/mc-mark)
+
+;; browse-url
+(global-set-key (kbd "C-c b") 'browse-url-at-point)
 
 ;; dash-at-point
 (global-set-key "\C-cd" 'dash-at-point)
@@ -155,9 +158,6 @@
 ;; Everyone loves snippets
 ;; (yas-global-mode 1)
 
-;; adding autopair mode
-(autopair-global-mode)
-
 ;; additional load-path
 (add-to-list 'load-path "~/.emacs.d/plugins/")
 
@@ -166,15 +166,14 @@
 (setq exec-path (append exec-path '("/usr/local/bin")))
 
 ;; ace-jump-mode
-(global-set-key (kbd "C-x SPC") 'ace-jump-char-mode)
+(global-set-key (kbd "C-c SPC") 'ace-jump-char-mode)
+
+;; write out a region i've marked
+(global-set-key (kbd "C-x w") 'write-region)
 
 ;; ido mode
 (require 'ido)
 (ido-mode t)
-
-;; multicursors
-(require 'multiple-cursors)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 
 ;; orgmode
 (setq org-log-done 'time)
@@ -191,7 +190,7 @@
   ;;
   ;; WARNING!  Depending on the default font,
   ;; if the size is not supported very well, the frame will be clipped
-  ;; so that the beginning of the buffer may not be visible correctly. 
+  ;; so that the beginning of the buffer may not be visible correctly.
   (set-face-attribute 'default nil :height 165)
 
   ;; use specific font for Korean charset.
@@ -213,11 +212,11 @@
 ;; Stolen from whattheemacsd.com
 ;;
 ;; Auto refresh buffers
-;; (global-auto-revert-mode 1)
+(global-auto-revert-mode 1)
 
 ;; ;; Also auto refresh dired, but be quiet about it
-;; (setq global-auto-revert-non-file-buffers t)
-;; (setq auto-revert-verbose nil)
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
 
 ;; only turn on line numbers when GoTo line is on
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
@@ -245,22 +244,24 @@
                     [simple-query "www.google.com" "www.google.com/search?q=" ""])
                    ("Google Groups"       .
                     [simple-query "groups.google.com" "groups.google.com/groups?q=" ""])
-                    ("IMDB"               .
-                     [simple-query "www.imdb.com"  "www.imdb.com/find?q=" ""])
-                    ("Twitter"            . "www.twitter.com/")
-                    ("Wikipedia"          .
-                     [simple-query "en.wikipedia.org" "en.wikipedia.org/w/index.php?search=" ""])
-
+                   ("IMDB"               .
+                    [simple-query "www.imdb.com"  "www.imdb.com/find?q=" ""])
+                   ("Twitter"            . "www.twitter.com/")
+                   ("Wikipedia"          .
+                    [simple-query "en.wikipedia.org" "en.wikipedia.org/w/index.php?search=" ""])
                    )))
 
 ;; google-this
-(global-set-key (kbd "C-x C-g") 'google-this)
+(global-set-key (kbd "C-c M-g") 'google-this)
 
 ;; magit-status
 (global-set-key (kbd "C-c g") 'magit-status)
 
+;; shortcut for shell
+(global-set-key (kbd "C-c s") 'shell)
+
 ;; transpose buffers http://www.emacswiki.org/emacs/TransposeWindows
-(defun transpose-buffers (arg)
+(defun flip-buffers (arg)
   "Transpose the buffers shown in two windows."
   (interactive "p")
   (let ((selector (if (>= arg 0) 'next-window 'previous-window)))
@@ -283,7 +284,7 @@
   "Opens up reddit-emacs"
   (interactive)
   (browse-url "http://reddit.com/r/emacs"))
-(global-set-key (kbd "C-x C-r") 'reddit-emacs)
+(global-set-key (kbd "C-c C-r") 'reddit-emacs)
 
 ;; git-gutter mode
 (add-hook 'ruby-mode-hook 'git-gutter-mode)
@@ -300,3 +301,85 @@
 
 (setq user-mail-address "jj@getchef.com")
 (setq user-full-name "JJ Asghar")
+
+;; Global add-hooks
+(add-hook 'before-save-hook 'delete-trailing-whitespace) ; time to delete those white spaces
+
+;; zones http://www.emacswiki.org/emacs/ZoneMode
+(defun zone-choose (pgm)
+   "Choose a PGM to run for `zone'."
+   (interactive
+    (list
+     (completing-read
+      "Program: "
+      (mapcar 'symbol-name zone-programs))))
+   (let ((zone-programs (list (intern pgm))))
+     (zone)))
+
+;;
+;; Stolen from http://home.thep.lu.se/~karlf/emacs.html
+;;
+
+;;
+;; Newsticker!
+;;
+(global-set-key (kbd "C-c C-n") 'newsticker-show-news)
+(setq
+ ;; newsticker-heading-format "%t"
+ ;; newsticker-item-format "%t"
+ ;; newsticker-desc-format "%d\n%c"
+ ;; newsticker-hide-old-items-in-newsticker-buffer t
+ ;; newsticker-html-renderer 'w3m-region
+ ;; newsticker-frontend 'newsticker-plainview
+ ;; newsticker-use-full-width nil
+ newsticker-retrieval-interval 0   ;don't fetch when I'm not reading RSS
+ newsticker-automatically-mark-items-as-old nil
+ newsticker-url-list '(
+                       ("abandonia" "http://www.abandonia.com/en/rss.xml" nil nil nil)
+                       ("slashdot" "http://rss.slashdot.org/Slashdot/slashdot" nil nil nil)
+                       ("SMBC" "http://www.smbc-comics.com/rss.php" nil nil nil)
+                       ("laserbrain" "http://laserbrainstudios.com/feed/" nil nil nil)
+                       ("BBC World" "http://feeds.bbci.co.uk/news/world/rss.xml" nil nil nil)
+                       ("stallman" "http://www.stallman.org/rss/rss.xml" nil nil nil)
+
+                       ))
+
+;; Remove ^M------------------------------------
+;; Call with M-x strip[TAB]
+(defun strip-^m ()
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward "\r" nil nil)
+    (replace-match "")))
+;;(define-key esc-map "o" 'strip-^m)
+;;--------------------------------------------
+
+;;
+;;
+;;
+
+;; I like two buffers but sometimes i like it vert/horizontal
+(defun toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+	     (next-win-buffer (window-buffer (next-window)))
+	     (this-win-edges (window-edges (selected-window)))
+	     (next-win-edges (window-edges (next-window)))
+	     (this-win-2nd (not (and (<= (car this-win-edges)
+					 (car next-win-edges))
+				     (<= (cadr this-win-edges)
+					 (cadr next-win-edges)))))
+	     (splitter
+	      (if (= (car this-win-edges)
+		     (car (window-edges (next-window))))
+		  'split-window-horizontally
+		'split-window-vertically)))
+	(delete-other-windows)
+	(let ((first-win (selected-window)))
+	  (funcall splitter)
+	  (if this-win-2nd (other-window 1))
+	  (set-window-buffer (selected-window) this-win-buffer)
+	  (set-window-buffer (next-window) next-win-buffer)
+	  (select-window first-win)
+	  (if this-win-2nd (other-window 1))))))
