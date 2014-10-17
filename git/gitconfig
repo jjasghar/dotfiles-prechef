@@ -1,27 +1,24 @@
-[user]
-  email = jjasghar@gmail.com
-  name = JJ Asghar
-[color]
-  ui = 1
 [github]
-  user = jjasghar
-  token = 8f5fzd3acbbe6de<YEAHRIGHTMYTOKEN>c600465deb6d1adc09e
+	user = jjasghar
+
+[user]
+	name = JJ Asghar
+	email = jj@getchef.com
+[push]
+	default = matching
+[core]
+	editor = emacsclient -n
+        excludesfile = /Users/jasghar/.gitignore
+[gitreview]
+	username = jj
+[color]
+        ui = 1
 [alias]
-  br = branch
-  co = checkout
-  revert-file = checkout HEAD
-  graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(cyan)(%an)%Creset' --abbrev-commit --date=relative
-  news = log -p HEAD@{1}..HEAD@{0}
+        commit-rnd      =  !sh -c \"git commit -m '$(curl -s http://whatthecommit.com/index.txt)'\"
+        br = branch
+        co = checkout
+        revert-file = checkout HEAD
+        graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(cyan)(%an)%Creset' --abbrev-commit --date=relative
+        news = log -p HEAD@{1}..HEAD@{0}
 	unstage = reset HEAD --
 	last = log -1 HEAD
-[diff]
-	tool = gvimdiff
-
-[merge]
-	tool = gvimdiff
-[push]
-	default = tracking
-[core]
-	excludesfile = /Users/jasghar/.gitignore
-[help]
-	autocorrect = 1
