@@ -1,16 +1,82 @@
 #
 # Main aliases
-# 
-alias cls='clear'
-alias :q='exit'
-alias :q!='logout'
-alias hostdir='ifconfig | grep inet ; python -m SimpleHTTPServer'
-alias c='clear'
+#
+alias ls="ls -G"
+alias be="bundle exec"
+alias dbmon='ssh -X -A -p 30456 jasghar@dbmon.pacloud.net'
+alias o='ssh ops01.pacloud.net'
+alias oo='ssh jasghar@j2a.uk.to'
+alias c='ssh chef.pacloud.net'
+alias emacs='emacsclient -n'
+alias vim='echo "dont you mean emacs?"'
+alias v='echo "dont you mean e?"'
+alias e='emacsclient -n'
+alias n='cd ~/Dropbox/Notes/'
+alias boot_nova='nova boot --flavor 5 --image d531a2dd-7ae9-4407-bb5a-e5ea03303d98 testbox && bash ~/repo/operations/nova/boot_watch.sh testbox'
+alias boot_knife="knife rackspace server create --server-name test-`date +%F` -N test-`date +%F` -E infrastructure -f 4 -I d4c7b93d-9f18-45dc-aa7c-3e3b126e3792 -r 'role[base]'"
 alias speedtest_500='wget --output-document=/dev/null http://speedtest.wdc01.softlayer.com/downloads/test500.zip'
-alias cd_date='mkdir `date +%F` && cd `date +%F`'
-alias v='gvim'
-alias vim='gvim'
-alias web_host='ruby -run -e httpd . -p 5000'
+alias ss='vim ~/scratchfile'
+alias s='ssh'
+alias gist='gist -c -p'
+alias grep='grep --color'
+alias chef_zero='ruby -e "require 'chef_zero/server'; server = ChefZero::Server.new(:port => 8889); server.start"'
+alias shells='ssh jjasghar@shells.ohai.su'
+alias disappoint="echo ಠ_ಠ"
+alias web_host="ruby -run -e httpd . -p 5000"
+alias sp="supernova private"
+alias spu="supernova public"
+alias ard_stop="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -deactivate -stop"
+alias ard_restart="sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -privs -all -restart -agent"
+alias :q='exit'
+alias cv='camper_van &!'
+alias pr='hub pull-request'
+alias roulette='[ $[ $RANDOM % 6  ] = 0  ] && echo "BOOM" || echo "Lucky bastard"'
+alias ctags="`brew --prefix`/bin/ctags"
+alias rgl="rvm gemset list"
+alias rgu="rvm gemset use"
+alias rgd="rvm gemset delete"
+alias rgc="rvm use 2.1.1@`date +%F` --create"
+alias rgg="rvm use 2.1.1@`date +%F`"
+alias kg="cd ~/.chef && cp knife.rb-guenter knife.rb && cd -"
+alias kl="cd ~/.chef && cp knife.rb-lab-repo knife.rb && cd -"
+
+alias gem-open="rvm use 2.1.1@knife-openstack --create"
+alias gem-open-nuke="rvm gemset delete 2.1.1@knife-openstack"
+
+alias gem-hp="rvm use 2.1.1@knife-hp --create"
+alias gem-hp-nuke="rvm gemset delete 2.1.1@knife-hp"
+
+# git aliases
+alias ga="git add"
+alias gb="git branch"
+alias gc="git commit"
+alias gca="git commit --amend"
+alias gco="git checkout"
+alias gr="git review"
+alias grr="git review -R"
+alias gnpr="git log origin/master.. --oneline"
+alias gdh="git diff HEAD --stat"
+alias gf="git fetch"
+alias gpu="git push"
+alias gpr="git pull --rebase"
+alias gmt="git mergetool -y"
+alias gmo="git merge origin/master"
+alias gs="git status -sb"
+alias glp="git log --graph --pretty --all"
+alias gld="git log --graph --decorate --all"
+alias git-merge-cleanup="git branch --merged | grep -v "\*" | xargs -n 1 git branch -d"
+alias mas="git checkout master"
+
+alias gv='gvim -p $(git status --short |egrep "^ M " | cut -d" " -f3) -c "tabdo Gdiff"'
+
+# knife alias
+alias k="knife"
+
+# docker aliases
+alias docker-c="docker run -i -t centos /bin/bash"
+alias docker-cr="docker run -i -t crux /bin/bash"
+alias docker-u="docker run -i -t ubuntu /bin/bash"
+
 
 #
 # Main bash functions
@@ -48,5 +114,5 @@ if [ `uname -a | awk {'print $1'}` == "Linux" ]
 		alias org_backup="tar zcvf org.`date +%F`.tar.gz org/ && mv org.`date +%F`.tar.gz ~/Dropbox/backup/"
 		alias kill_dock_bounce="defaults write com.apple.dock single-app -bool true && killall Dock"
 		alias bring_dock_bounce_back="defaults write com.apple.dock single-app -bool false && killall Dock"
-		
+
 fi
